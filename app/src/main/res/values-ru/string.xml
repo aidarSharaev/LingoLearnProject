@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="study">Обучение</string>
+    <string name="test_of_the_day">Тест дня</string>
+    <string name="dictionary">Словарь</string>
+    <string name="profile">Профиль</string>
+    <string name="translator">Переводчик</string>
+    <string name="not_connected">⚠️ Вы не подключены к интернету</string>
+</resources>

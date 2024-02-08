@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Allows us to override night specific attributes in the
+         values-night folder. -->
+    <style name="NightAdjusted.Theme.Ll" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- The final theme we use -->
+    <style name="Theme.Ll" parent="NightAdjusted.Theme.Ll" />
+
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+    </style>
+
+    <style name="Theme.Ll.Splash" parent="NightAdjusted.Theme.Splash">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.Ll</item>
+    </style>
+
+</resources>

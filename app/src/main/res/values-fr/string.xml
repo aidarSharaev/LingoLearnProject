@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="study">Étude</string>
+    <string name="test_of_the_day">Test du jour</string>
+    <string name="dictionary">Dictionnaire</string>
+    <string name="profile">Profil</string>
+    <string name="translator">Translator</string>
+    <string name="not_connected">Vous n\'êtes pas connecté à l\'internet</string>
+</resources>

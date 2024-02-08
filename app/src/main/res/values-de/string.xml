@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="study">Studium</string>
+    <string name="test_of_the_day">Test des Tages</string>
+    <string name="dictionary">Wörterbuch</string>
+    <string name="profile">Profil</string>
+    <string name="translator">Übersetzer</string>
+    <string name="not_connected">⚠️ Sie sind nicht mit dem Internet verbunden</string>
+
+</resources>
