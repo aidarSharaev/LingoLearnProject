@@ -7,18 +7,17 @@ import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
+import ru.aidar.lingolearn.utils.AvailableLanguage
 
 data class LlTranslatorState(
     val availableModels: Set<String> = setOf(),
     val availableLanguages: List<LingoLearnLanguage> = listOf(),
-    val sourceText: String = "",
-    val targetText: String = "",
-    val sourceLanguage: String = TranslateLanguage.RUSSIAN,
-    val targetLanguage: String = TranslateLanguage.ENGLISH,
+    val sourceText: String = "sourceText",
+    val targetText: String = "targetText",
+    val sourceLanguage: AvailableLanguage = AvailableLanguage("RUSSIAN", "ru"),
+    val targetLanguage: AvailableLanguage = AvailableLanguage("ENGLISH", "en"),
 )
 
 class LingoLearnTranslator() {
@@ -27,10 +26,6 @@ class LingoLearnTranslator() {
         return flowOf(translatorState)
     }
 
-    private val _mutableState: MutableStateFlow<LlTranslatorState> =
-        MutableStateFlow(LlTranslatorState())
-
-    val state = _mutableState.asStateFlow()
 
     companion object {
         private const val NUM_TRANSLATORS = 4
@@ -100,13 +95,13 @@ class LingoLearnTranslator() {
         withContext(Dispatchers.Default) {
             val text = translatorState.sourceText
             val sourceLanguage = translatorState.sourceLanguage
-            val targetLanguage = translatorState.targetText
+            val targetLanguage = translatorState.targetLanguage
             // todo глянуть
-            if(sourceLanguage == null || targetLanguage == null || text.isNullOrEmpty()) {
-                return@withContext
-            }
-            val sourceLangCode = TranslateLanguage.fromLanguageTag(sourceLanguage)!!
-            val targetLangCode = TranslateLanguage.fromLanguageTag(targetLanguage)!!
+//            if(sourceLanguage. == null || targetLanguage == null || text.isNullOrEmpty()) {
+//                return@withContext
+//            }
+            val sourceLangCode = TranslateLanguage.fromLanguageTag(sourceLanguage.alphaCode)!!
+            val targetLangCode = TranslateLanguage.fromLanguageTag(targetLanguage.alphaCode)!!
             val options = TranslatorOptions.Builder()
                 .setSourceLanguage(sourceLangCode)
                 .setTargetLanguage(targetLangCode)

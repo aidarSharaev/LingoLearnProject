@@ -25,7 +25,7 @@ class TranslatorViewModel @Inject constructor(
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    val translatorState: StateFlow<LlTranslatorState> = llTranslator.state.stateIn(
+    val translatorState: StateFlow<LlTranslatorState> = llTranslator.provideState().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = LlTranslatorState(),
@@ -40,7 +40,7 @@ class TranslatorViewModel @Inject constructor(
     }
 }
 
-class TranslatopViewModelWrapper(
+/*class TranslatopViewModelWrapper(
     private val translatorState: StateFlow<LlTranslatorState>
 ) : BaseViewModelWrapper {
 
@@ -48,5 +48,5 @@ class TranslatopViewModelWrapper(
         get() = TODO("Not yet implemented")
 
 
-}
+}*/
 
