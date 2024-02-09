@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.aidar.lingolearn.base.BaseNetworkMonitor
+import ru.aidar.lingolearn.component.text_to_speech.LlTextToSpeech
 import ru.aidar.lingolearn.data.HUI
 import ru.aidar.lingolearn.data.UserDataRepository
 import ru.aidar.lingolearn.domain.network.ConnectivityManagerNetworkMonitor
@@ -34,9 +35,13 @@ object MLKitDI {
 
     @Provides
     @Singleton
-    fun provideTranslator()
-        = LingoLearnTranslator()
+    fun provideTextToSpeech(
+        @ApplicationContext context: Context
+    ) = LlTextToSpeech(context = context)
 
+    @Provides
+    @Singleton
+    fun provideTranslator() = LingoLearnTranslator()
 
 
 }

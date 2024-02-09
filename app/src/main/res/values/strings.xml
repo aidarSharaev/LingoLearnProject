@@ -6,5 +6,6 @@
     <string name="profile">Profile</string>
     <string name="translator">Translator</string>
     <string name="not_connected">⚠️ You aren\'t connected to the internet</string>
+    <string name="enter_text">Enter text...</string>
 
 </resources>
