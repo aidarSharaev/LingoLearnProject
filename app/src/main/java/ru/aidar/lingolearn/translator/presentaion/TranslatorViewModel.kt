@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -16,15 +19,37 @@ import ru.aidar.lingolearn.utils.AvailableLanguage
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * 1) узнать про удаление английского языка
+ * 2) job'oв дохуя
+ * 3) пересмотреть init
+ * 4) проверить checkDownloadedOnInit()
+ * 5) проверить ввод какого-то языка, а затем смену локали целевой и вводной
+ * 6) проверить эксешпены и добавить туда хэндлеры
+ * 7) что будет на перевод китайского на англ без скаичивания
+ * 8) удаление английского
+ * */
+
 @HiltViewModel
 class TranslatorViewModel @Inject constructor(
     private val llTranslator: LingoLearnTranslator,
-    private val llTextToSpeech: LlTextToSpeech
+    private val llTextToSpeech: LlTextToSpeech,
 ) : ViewModel(), CoroutineScope {
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO
+    private val parentJob: Job = SupervisorJob()
 
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default + parentJob
+
+    init {
+        myLog("TranslatorViewModel init")
+        parentJob.invokeOnCompletion {
+            myLog(
+                "${parentJob.children.count()} " +
+                    "${parentJob.isActive}"
+            )
+        }
+    }
 
     //TODO узнать про смерть
     val translatorState: StateFlow<LlTranslatorState> = llTranslator.translatorState.stateIn(
@@ -33,59 +58,48 @@ class TranslatorViewModel @Inject constructor(
         initialValue = LlTranslatorState(),
     )
 
-    fun download(language: AvailableLanguage) {
-        llTranslator.downloadLanguage(language)
+    fun download(language: AvailableLanguage, thatsTheTarget: Boolean) {
+        llTranslator.launchDownload(language = language, thatsTheTarget = thatsTheTarget)
+    }
+
+    fun delete(language: AvailableLanguage, thatsTheTarget: Boolean) {
+        llTranslator.launchDelete(language = language, thatsTheTarget = thatsTheTarget)
     }
 
     fun changeSourceText(newText: String) {
-        llTranslator.changeSourceText(newText)
+        llTranslator.changeSourceText(newSourceText = newText)
     }
 
     fun peekNewSourceLanguage(language: AvailableLanguage) {
-        if(translatorState.value.targetLanguage != language)
-            llTranslator.peekNewSourceLanguage(language)
-        else
-            swapSourceAndTargetLanguages()
+        llTranslator.peekNewSourceLanguage(language = language)
     }
 
     fun peekNewTargetLanguage(language: AvailableLanguage) {
-        if(translatorState.value.sourceLanguage != language) {
-            Log.d("HAHA", "!=")
+        llTranslator.peekNewTargetLanguage(language = language)
+    }
 
-            llTranslator.peekNewTargetLanguage(language)
-        } else {
-            Log.d("HAHA", "==")
+    fun swapLanguages() {
+        llTranslator.swapLanguages()
+    }
 
-            swapSourceAndTargetLanguages()
+    fun textToSpeech(thatsIsSourceText: Boolean) {
+        with(translatorState.value) {
+            llTextToSpeech.readTheText(
+                textToSpeak = if(thatsIsSourceText) sourceText else targetText,
+                language = if(thatsIsSourceText) sourceLanguage else targetLanguage
+            )
         }
-    }
-
-    fun swapSourceAndTargetLanguages() {
-        val temp = translatorState.value.sourceLanguage
-        llTranslator.peekNewSourceLanguage(translatorState.value.targetLanguage)
-        llTranslator.peekNewTargetLanguage(temp)
-    }
-
-    fun textToSpeech() {
-        llTextToSpeech.readTheText(
-            translatorState.value.sourceText,
-            translatorState.value.sourceLanguage
-        )
     }
 
     override fun onCleared() {
         Log.d("ViewModel", "onCleared")
+        parentJob.cancelChildren()
+        parentJob.cancel()
+        llTranslator.onCleared()
         super.onCleared()
     }
+
+    private fun myLog(comment: String) {
+        Log.d("TranslatorViewModel", comment)
+    }
 }
-
-/*class TranslatopViewModelWrapper(
-    private val translatorState: StateFlow<LlTranslatorState>
-) : BaseViewModelWrapper {
-
-    override val job: Job?
-        get() = TODO("Not yet implemented")
-
-
-}*/
-

@@ -34,6 +34,22 @@ data class RouteStringDraw(
 
 object Constants {
 
+    const val ENGLISH_IS_ALWAYS_DOWNLOADED = 1
+
+
+    val LANGUAGE_MAP = mapOf(
+        "zh" to "CHINESE",
+        "en" to "ENGLISH",
+        "fr" to "FRENCH",
+        "de" to "GERMAN",
+        "he" to "HEBREW",
+        "hi" to "HINDI",
+        "ja" to "JAPANESE",
+        "ru" to "RUSSIAN",
+        "es" to "SPANISH",
+    )
+
+
     const val NUMBER_OF_NAVIGATION_IN_COLUMN = 5
 
     const val ROW_WEIGHT = 1f / NUMBER_OF_NAVIGATION_IN_COLUMN
@@ -88,5 +104,12 @@ object Constants {
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         )
+
+    sealed interface LanguagesDownloadState {
+        data object Creating : LanguagesDownloadState
+        data object AllRight : LanguagesDownloadState
+        data object OnlyOne : LanguagesDownloadState
+
+    }
 
 }

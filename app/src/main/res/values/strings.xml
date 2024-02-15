@@ -7,5 +7,6 @@
     <string name="translator">Translator</string>
     <string name="not_connected">⚠️ You aren\'t connected to the internet</string>
     <string name="enter_text">Enter text...</string>
+    <string name="model_is_not_downloaded">Model is not downloaded</string>
 
 </resources>
