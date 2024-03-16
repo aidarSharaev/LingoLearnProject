@@ -28,7 +28,7 @@ import kotlin.coroutines.CoroutineContext
  * 6) проверить эксешпены и добавить туда хэндлеры
  * 7) что будет на перевод китайского на англ без скаичивания
  * 8) удаление английского
- * */
+ **/
 
 @HiltViewModel
 class TranslatorViewModel @Inject constructor(

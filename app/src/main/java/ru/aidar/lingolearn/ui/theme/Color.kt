@@ -8,5 +8,5 @@ val LlColorDark: Color = Color(0xFF3076ae)
 val LlColorBlack: Color = Color(0xFF313131)
 val LlColorBlackAlpha: Color = Color(0xFF444444)
 val LlColorWhiteAlpha: Color = Color(0xFFF0FFF0)
-val LlColorError: Color = Color(0xFF9B0C1C)
-
+val LlColorDarkError: Color = Color(0xFF9B0C1C)
+val LlColorLightError: Color = Color(0xFFFFEB00)

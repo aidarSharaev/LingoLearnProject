@@ -272,7 +272,6 @@ class LingoLearnTranslator @Inject constructor(
             modelManager.download(model, conditions)
                 .addOnSuccessListener {
                     myLog("downloadLanguage success")
-
                     //llTranslatorFlowWrapper.addNewModelInDownloadedLanguages(language = language)
                     llTranslatorFlowWrapper.updateIsSomeModelDownloaded(
                         value = true,
@@ -289,17 +288,24 @@ class LingoLearnTranslator @Inject constructor(
     }
 
 
+
     private suspend fun deleteLanguage(
         language: AvailableLanguage,
         thatsTheTarget: Boolean
     ): Boolean {
         myLog("deleteLanguage called")
+        if (language.alphaCode == "en") return false
         return suspendCoroutine { continuation ->
             modelManager.deleteDownloadedModel(
                 TranslateRemoteModel.Builder(language.alphaCode).build()
             )
                 .addOnSuccessListener {
                     myLog("deleteLanguage success")
+                    llTranslatorFlowWrapper.updateIsSomeModelDownloaded(
+                        value = false,
+                        thatsTheTarget = thatsTheTarget
+                    )
+                    llTranslatorFlowWrapper.updateIsModelsAreLoaded()
                     continuation.resume(true)
                 }
                 .addOnFailureListener {

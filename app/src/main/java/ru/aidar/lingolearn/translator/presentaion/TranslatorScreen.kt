@@ -46,6 +46,8 @@ import kotlinx.coroutines.launch
 import ru.aidar.lingolearn.R
 import ru.aidar.lingolearn.component.LlLoading
 import ru.aidar.lingolearn.translator.LlTranslatorState
+import ru.aidar.lingolearn.ui.theme.LlColorDarkError
+import ru.aidar.lingolearn.ui.theme.LlColorLightError
 import ru.aidar.lingolearn.ui.theme.LlColors
 import ru.aidar.lingolearn.ui.theme.LlFontFamily
 import ru.aidar.lingolearn.ui.theme.LocalLLColors
@@ -417,7 +419,7 @@ fun LlTranslatorTextFields(
         Row(
             modifier = Modifier
                 .height(150.dp)
-                .background(llColors.onBackground)
+                .background(llColors.onBackground.copy(alpha = if(current == 0) 0.7f else 1f))
         ) {
             TextField(
                 readOnly = readOnly[current],
@@ -492,11 +494,8 @@ fun LlTranslatorTextFields(
                     text = stringResource(id = R.string.model_is_not_downloaded),
                     style = TextStyle(
                         color = when(current) {
-                            0 -> if(llUiState.isSourceModelDownloaded) Color.Transparent else Color(
-                                0xFFec7c26
-                            )
-
-                            else -> if(llUiState.isTargetModelDownloaded) Color.Transparent else Color.Yellow
+                            0 -> if(llUiState.isSourceModelDownloaded) Color.Transparent else LlColorDarkError
+                            else -> if(llUiState.isTargetModelDownloaded) Color.Transparent else LlColorLightError
                         },
                         fontFamily = LlFontFamily,
                         fontWeight = FontWeight.Light,
